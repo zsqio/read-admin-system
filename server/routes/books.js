@@ -96,19 +96,15 @@ router.post('/offshelf', (req, res) => {
 
 // 获取图书信息
 router.get('/list', (req, res) => {
-    const { status, title, order } = req.query
+    const {name} = req.query
     const filter = {}
-    if (status && status !== '0') {
-        filter.status = Number(status)
+    if (name) {
+        filter.name = name
     }
-    if (title) {
-        filter.title = title
-    }
-    if (order) {
+    if (name) {
         BookSchema
             .find()
             .where(filter)
-            .sort({ borrowCount: -1 })
             .exec((err, data) => {
                 if (err) {
                     res.json({

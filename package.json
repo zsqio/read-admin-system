@@ -1,8 +1,8 @@
 {
-  "name": "book",
+  "name": "read-admin-system",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "彭佳勋 <pengjx@mingyuanyun.com>",
+  "author": "zsqio",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
