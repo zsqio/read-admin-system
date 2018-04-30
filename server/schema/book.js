@@ -1,0 +1,14 @@
+const mongoose = require('../db')
+const Schema = mongoose.Schema
+
+const BookSchema = new Schema({
+    name: String, // 图书名称,
+    engName: String, //图书英文名称,
+    cover: String, // 封面
+    score: Number, // 评分
+    author: String, // 作者
+    desc: String, // 图书简介
+    publisher: String, // 出版社
+})
+
+module.exports = mongoose.model('Book', BookSchema)
