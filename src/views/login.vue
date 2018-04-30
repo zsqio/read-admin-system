@@ -90,7 +90,7 @@ export default {
     width: 25%;
     margin: 0 auto;
     padding: 40px;
-    background-color: rgba(10, 10, 10, 0.77);
+    background-color: rgba(10, 10, 10, 0.6);
     border: 2px ridge rgba(238, 238, 238, 0.13);
     border-radius: 5px;
     -moz-box-shadow: 0 -5px 10px 1px rgba(16, 16, 16, 0.57);

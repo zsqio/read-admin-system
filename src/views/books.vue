@@ -8,15 +8,6 @@
             <el-tab-pane label="馆存"
                 name="store">
                 <div class="header">
-                    <!--<el-select v-model="status"-->
-                        <!--placeholder="筛选"-->
-                        <!--@change="filterChange">-->
-                        <!--<el-option v-for="item in bookStatus"-->
-                            <!--:key="item.value"-->
-                            <!--:label="item.label"-->
-                            <!--:value="item.value">-->
-                        <!--</el-option>-->
-                    <!--</el-select>-->
                     <el-input v-model="keyStore"
                         prefix-icon="el-icon-search"
                         autofocus
@@ -27,7 +18,7 @@
                         @click="searchStore">搜索</el-button>
                 </div>
                 <div class="content">
-                    <el-table :data="bookData"
+                    <el-table :data="showData"
                         stripe
                         style="width: 100%"
                         v-loading="loading"
@@ -75,6 +66,16 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                </div>
+                <div class="pagination-box">
+                    <el-pagination
+                      background
+                      layout="prev, pager, next"
+                      :total="bookData.length"
+                      :pageSize="pageSize"
+                      @current-change="handleCurrentChange"
+                    >
+                    </el-pagination>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="录入"
@@ -144,6 +145,8 @@ export default {
             keyStore: '',
             recordList: [],
             bookData: [],
+            showData: [],
+            pageSize: 5,
             form: {
               name: '',
               engName: '',
@@ -230,6 +233,11 @@ export default {
             }).then(res => {
                 if (res.data.result) {
                     this.bookData = res.data.data
+                  if(this.bookData.length > this.pageSize) {
+                      this.showData = this.bookData.slice(0,this.pageSize)
+                  } else {
+                      this.showData = this.bookData
+                  }
                 } else {
                     this.$message.error('查询失败')
                 }
@@ -266,6 +274,9 @@ export default {
                     message: '已取消下架该图书'
                 })
             })
+        },
+        handleCurrentChange(index) {
+            this.showData = this.bookData.slice((index-1)*this.pageSize, index*this.pageSize)
         }
     },
     created() {
@@ -279,5 +290,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+  .pagination-box {
+      width: 50%;
+      margin: 20px auto;
+  }
 </style>
