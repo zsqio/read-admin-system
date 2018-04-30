@@ -54,6 +54,7 @@ router.post('/record', (req, res) => {
         }
     })
 })
+//像数据库中新插入一条数据
 function insert({ name, engName,  cover, author, publisher, score, desc ,}) {
     return new Promise((resolve, reject) => {
         let book = new BookSchema({
@@ -76,7 +77,7 @@ function insert({ name, engName,  cover, author, publisher, score, desc ,}) {
     })
 }
 
-// 图书下架
+// 图书下架,即从数据库中删除该条记录
 router.post('/offshelf', (req, res) => {
     const { name } = req.body
     BookSchema.remove({ name }, (err, data) => {
