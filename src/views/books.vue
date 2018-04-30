@@ -73,6 +73,7 @@
                       layout="prev, pager, next"
                       :total="bookData.length"
                       :pageSize="pageSize"
+                      :current-page="currentPage"
                       @current-change="handleCurrentChange"
                     >
                     </el-pagination>
@@ -89,7 +90,7 @@
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="图书英文名称:">
+                  <el-form-item label="图书外文名称:">
                     <el-input v-model="form.engName"
                               placeholder="选填"
                     ></el-input>
@@ -113,6 +114,12 @@
                     <el-input v-model="form.score"
                               placeholder="必填"
                     ></el-input>
+                  </el-form-item>
+                  <el-form-item label="分类:">
+                    <el-cascader
+                      :options="tagOptions"
+                      v-model="form.tag">
+                    </el-cascader>
                   </el-form-item>
                   <el-form-item label="图书简介:">
                     <el-input type="textarea"
@@ -147,6 +154,7 @@ export default {
             bookData: [],
             showData: [],
             pageSize: 5,
+            currentPage: 1,
             form: {
               name: '',
               engName: '',
@@ -154,6 +162,7 @@ export default {
               author: '',
               publisher: '',
               score: 0,
+              tag: [],
               desc: '',
             },
             rules: {
@@ -176,7 +185,138 @@ export default {
                     { required: true, message: '请填写图书简介', trigger: 'blur' },
                     { min: 2, max: 30, message: '长度在 2 到 30个字符', trigger: 'blur'}
                 ]
-            }
+            },
+            tagOptions: [
+                {
+                    value: '文学',
+                    label: '文学',
+                    children: [
+                        {
+                          value: '小说',
+                          label: '小说'
+                        },
+                        {
+                          value: '外国文学',
+                          label: '外国文学'
+                        },
+                        {
+                          value: '文学',
+                          label: '文学'
+                        },
+                        {
+                          value: '随笔',
+                          label: '随笔'
+                        },
+                        {
+                          value: '诗歌',
+                          label: '诗歌'
+                        },
+                        {
+                          value: '童话',
+                          label: '童话'
+                        },
+                    ]
+                },
+                {
+                    value: '流行',
+                    label: '流行',
+                    children: [
+                        {
+                            value: '漫画',
+                            label: '漫画'
+                        },
+                        {
+                            value: '绘本',
+                            label: '绘本'
+                        },
+                        {
+                            value: '青春',
+                            label: '青春'
+                        },
+                        {
+                            value: '科幻',
+                            label: '科幻'
+                        },
+                        {
+                            value: '悬疑',
+                            label: '悬疑'
+                        },
+                        {
+                            value: '言情',
+                            label: '言情'
+                        },
+                        {
+                            value: '武侠',
+                            label: '武侠'
+                        },
+                  ]
+                },
+                {
+                    value: '历史文化',
+                    label: '历史文化',
+                    children: [
+                        {
+                            value: '历史',
+                            label: '历史'
+                        },
+                        {
+                            value: '心理学',
+                            label: '心理学'
+                        },
+                        {
+                            value: '哲学',
+                            label: '哲学'
+                        },
+                        {
+                            value: '文化',
+                            label: '文化'
+                        },
+                        {
+                            value: '建筑',
+                            label: '建筑'
+                        },
+                        {
+                            value: '宗教',
+                            label: '宗教'
+                        },
+                        {
+                            value: '国学',
+                            label: '国学'
+                        },
+                    ]
+                },
+                {
+                    value: '生活',
+                    label: '生活',
+                    children: [
+                        {
+                            value: '爱情',
+                            label: '爱情'
+                        },
+                        {
+                            value: '旅行',
+                            label: '旅行'
+                        },
+                        {
+                            value: '养生',
+                            label: '养生'
+                        },
+                        {
+                            value: '摄影',
+                            label: '摄影'
+                        },
+                        {
+                            value: '女性',
+                            label: '女性'
+                        },
+                        {
+                            value: '家居',
+                            label: '家居'
+                        },
+                    ]
+                },
+
+            ]
 
         }
     },
@@ -215,6 +355,7 @@ export default {
             }).then(res => {
                 if (res.data.result) {
                     this.bookData = res.data.data
+                    this.showData = this.bookData
                 } else {
                     this.$message.error()
                 }
@@ -250,16 +391,16 @@ export default {
         refreshList() {
             this.getBookData()
         },
-        offshelf(title) {
+        offshelf(name) {
             this.$confirm('是否确认下架该图书？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.http.post(`${api.bookApi}/offshelf`, { title })
+                this.http.post(`${api.bookApi}/offshelf`, { name })
                     .then(res => {
                         if (res.data.result) {
-                            this.$message.success('操作成功')
+                            this.$message.success('该图书已经成功下架')
                             this.refreshList()
                         } else {
                             this.$message.success(`操作失败: ${res.data.msg}`)
