@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-        <div class="title white">甄选书屋管理后台</div>
+        <div class="title">甄选书屋管理后台</div>
         <div class="main">
             <el-form :model="user"
                 :rules="rules"
@@ -16,7 +16,6 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary"
-                        plain
                         style="width: 100%;"
                         @click="login">登录</el-button>
                 </el-form-item>
@@ -88,7 +87,7 @@ export default {
     font-size: 36px;
   }
   .main {
-    width: 30%;
+    width: 25%;
     margin: 0 auto;
     padding: 40px;
     background-color: rgba(10, 10, 10, 0.77);

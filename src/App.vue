@@ -53,12 +53,13 @@ body,
 .login {
   width: 100%;
   height: 100%;
-  background: url("./assets/image/bg.jpg") no-repeat center;
+  background: url("./assets/image/bg4.png") no-repeat center;
   background-size: cover;
 }
 .el-container {
   height: 100%;
   .el-header {
+    background: $main-color;
     border-bottom: 1px solid $border-color;
   }
   .el-main {

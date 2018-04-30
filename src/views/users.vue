@@ -31,7 +31,8 @@
                 <el-table-column width="80"
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text"
+                        <el-button type="primary"
+                                   plain
                             @click="del(scope.row.name)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -114,7 +115,8 @@ export default {
                         pwd: this.user.pwd
                     }).then(res => {
                         if (res.data.result) {
-                            this.$message.success('添加成功')
+                            this.$message.success('新用户添加成功')
+                            this.user = {}
                             this.hideAddModal()
                             this.getUserList()
                         } else {
@@ -127,8 +129,8 @@ export default {
             })
         },
         del(name) {
-            if (name === 'root') {
-                this.$message.error('不能删除root用户')
+            if (name === 'admin') {
+                this.$message.error('不能删除最高管理员admin')
             } else {
                 this.$confirm(`确认删除用户 ${name} 吗？`, '提示', {
                     confirmButtonText: '确定',
@@ -149,7 +151,7 @@ export default {
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: '已取消删除该用户'
                     })
                 })
             }

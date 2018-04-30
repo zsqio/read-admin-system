@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
     UserSchema.find({ name, pwd }, (err, data) => {
         if (err) {
             res.json({
-                result: true,
+                result: false,
                 msg: err
             })
         } else {
@@ -32,7 +32,7 @@ router.post('/login', (req, res) => {
                 })
             } else {
                 res.json({
-                    result: true,
+                    result: false,
                     msg: '用户不存在或密码错误'
                 })
             }
@@ -88,7 +88,7 @@ router.post('/add', (req, res) => {
                         } else {
                             res.json({
                                 result: true,
-                                msg: '新增成功'
+                                msg: '新用户添加成功'
                             })
                         }
                     })

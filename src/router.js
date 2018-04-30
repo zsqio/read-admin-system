@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Login from '@/views/login'
 import Books from '@/views/books'
 import Users from '@/views/users'
-import Records from '@/views/records'
 import Wishes from '@/views/wishes'
 
 Vue.use(Router)
@@ -28,11 +27,6 @@ export default new Router({
             path: '/users',
             name: 'Users',
             component: Users
-        },
-        {
-            path: '/records',
-            name: 'Records',
-            component: Records
         },
         {
             path: '/wishes',

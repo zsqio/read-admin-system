@@ -8,15 +8,15 @@
             <el-tab-pane label="馆存"
                 name="store">
                 <div class="header">
-                    <el-select v-model="status"
-                        placeholder="筛选"
-                        @change="filterChange">
-                        <el-option v-for="item in bookStatus"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
+                    <!--<el-select v-model="status"-->
+                        <!--placeholder="筛选"-->
+                        <!--@change="filterChange">-->
+                        <!--<el-option v-for="item in bookStatus"-->
+                            <!--:key="item.value"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
                     <el-input v-model="keyStore"
                         prefix-icon="el-icon-search"
                         autofocus
@@ -35,6 +35,12 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.8)"
                         refs="onshelfTable">
+                      <el-table-column label="序号"
+                                       width="80">
+                        <template slot-scope="scope">
+                          {{scope.$index + 1}}
+                        </template>
+                      </el-table-column>
                         <el-table-column label="封面"
                             width="120">
                             <template slot-scope="scope">
@@ -62,9 +68,10 @@
                         <el-table-column width="80"
                             label="操作">
                             <template slot-scope="scope">
-                                <el-button v-show="scope.row.status === 1"
-                                    type="text"
-                                    @click="offshelf(scope.row.title)">下架</el-button>
+                                <el-button
+                                    type="primary"
+                                    plain
+                                    @click="offshelf(scope.row.name)">下架</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -72,27 +79,45 @@
             </el-tab-pane>
             <el-tab-pane label="录入"
                 name="recording">
-                <el-form :model="form">
+                <el-form :model="form"
+                         :rules="rules"
+                         ref="recordForm"
+                >
                   <el-form-item label="图书名称:">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.name"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="图书英文名称:">
-                    <el-input v-model="form.engName"></el-input>
+                    <el-input v-model="form.engName"
+                              placeholder="选填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="封面地址:">
-                    <el-input v-model="form.cover"></el-input>
+                    <el-input v-model="form.cover"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="作者:">
-                    <el-input v-model="form.author"></el-input>
+                    <el-input v-model="form.author"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="出版信息:">
-                    <el-input v-model="form.publisher"></el-input>
+                    <el-input v-model="form.publisher"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="评分:">
-                    <el-input v-model="form.score"></el-input>
+                    <el-input v-model="form.score"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="图书简介:">
-                    <el-input type="textarea" v-model="form.desc"></el-input>
+                    <el-input type="textarea"
+                              v-model="form.desc"
+                              placeholder="必填"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="onSubmit">录入图书</el-button>
@@ -116,8 +141,9 @@ export default {
         return {
             tabActive: 'store',
             key: '',
-            keyStore: [],
+            keyStore: '',
             recordList: [],
+            bookData: [],
             form: {
               name: '',
               engName: '',
@@ -126,6 +152,27 @@ export default {
               publisher: '',
               score: 0,
               desc: '',
+            },
+            rules: {
+                name: [
+                    { required: true, message: '请填写图书名称', trigger: 'blur' }
+                ],
+                cover: [
+                    { required: true, message: '请填写图书封面地址', trigger: 'blur' }
+                ],
+                author: [
+                    { required: true, message: '请填写作者', trigger: 'blur' },
+                ],
+                publisher: [
+                    { required: true, message: '请填写出版社', trigger: 'blur' }
+                ],
+                score: [
+                    { required: true, message: '请填写评分', trigger: 'blur' }
+                ],
+                desc: [
+                    { required: true, message: '请填写图书简介', trigger: 'blur' },
+                    { min: 2, max: 30, message: '长度在 2 到 30个字符', trigger: 'blur'}
+                ]
             }
 
         }
@@ -193,7 +240,7 @@ export default {
             })
         },
         refreshList() {
-            this.getBookData(this.status)
+            this.getBookData()
         },
         offshelf(title) {
             this.$confirm('是否确认下架该图书？', '提示', {
@@ -216,7 +263,7 @@ export default {
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消删除'
+                    message: '已取消下架该图书'
                 })
             })
         }

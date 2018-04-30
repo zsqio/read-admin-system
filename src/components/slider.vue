@@ -8,8 +8,6 @@
                 class="tc">图书管理</el-menu-item>
             <el-menu-item index="users"
                 class="tc">用户管理</el-menu-item>
-            <el-menu-item index="records"
-                class="tc">借阅记录</el-menu-item>
             <el-menu-item index="wishes"
                 class="tc">愿望清单</el-menu-item>
         </el-menu>

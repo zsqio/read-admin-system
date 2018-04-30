@@ -5,9 +5,9 @@
                 <li class="title fl"
                     @click="toIndex">甄选书屋管理后台</li>
                 <li class="user-name fs-16">
-                    <span style="font-weight: normal;">您好: </span>{{username}}</li>
+                    <span style="font-size: 14px;">欢迎您! </span>{{username}}</li>
                 <li class="log-out fs-14"
-                    @click="logOut">退出</li>
+                    @click="logOut">登出</li>
             </ul>
         </header>
     </div>
@@ -27,7 +27,7 @@ export default {
             this.$router.push('/')
         },
         logOut() {
-            this.$confirm('确认退出？', '提示', {
+            this.$confirm('确认登出？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -38,7 +38,7 @@ export default {
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消'
+                    message: '已取消登出'
                 })
             })
         }
@@ -63,12 +63,16 @@ export default {
         font-weight: bold;
         font-size: 18px;
         cursor: pointer;
-        color: $main-color;
+        color: #fff;
       }
       .user-name {
+        color: #fff;
+        font-size: 16px;
         font-weight: 500;
       }
       .log-out {
+        color: #fff;
+        font-size: 14px;
         margin-left: 20px;
         cursor: pointer;
       }

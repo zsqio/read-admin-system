@@ -20,7 +20,7 @@
                 <el-table-column prop="_id"
                     label="书名">
                 </el-table-column>
-                <el-table-column label="被加入愿望单">
+                <el-table-column label="愿望者">
                     <template slot-scope="scope">
                         {{scope.row.account}} 次
                     </template>
