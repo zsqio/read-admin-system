@@ -85,43 +85,43 @@
                          :rules="rules"
                          ref="recordForm"
                 >
-                  <el-form-item label="图书名称:">
+                  <el-form-item label="图书名称:" prop="name">
                     <el-input v-model="form.name"
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="图书外文名称:">
+                  <el-form-item label="图书外文名称:" prop="engName">
                     <el-input v-model="form.engName"
                               placeholder="选填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="封面地址:">
+                  <el-form-item label="封面地址:" prop="cover">
                     <el-input v-model="form.cover"
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="作者:">
+                  <el-form-item label="作者:" prop="author">
                     <el-input v-model="form.author"
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="出版信息:">
+                  <el-form-item label="出版信息:" prop="publisher">
                     <el-input v-model="form.publisher"
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="评分:">
+                  <el-form-item label="评分:" prop="score">
                     <el-input v-model="form.score"
                               placeholder="必填"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="分类:">
+                  <el-form-item label="分类:" prop="tag">
                     <el-cascader
                       :options="tagOptions"
                       v-model="form.tag">
                     </el-cascader>
                   </el-form-item>
-                  <el-form-item label="图书简介:">
+                  <el-form-item label="图书简介:" prop="desc">
                     <el-input type="textarea"
                               v-model="form.desc"
                               placeholder="必填"
@@ -323,6 +323,10 @@ export default {
     methods: {
       //录入图书信息
         onSubmit() {
+            if(!this.form.name || !this.form.cover || !this.form.author || !this.form.publisher || !this.form.desc) {
+                this.$message.error('请填写必要的信息')
+                return 
+            }
           this.http.post(`${api.bookApi}/record`, this.form)
             .then(res => {
               if (res.data.result) {
@@ -346,6 +350,8 @@ export default {
         filterChange() {
             this.getBookData()
         },
+
+        //搜索图书信息
         searchStore() {
             this.showLoading()
             this.http.get(`${api.bookApi}/list`, {
@@ -365,6 +371,7 @@ export default {
                 this.$message.error(err)
             })
         },
+        //获取图书列表
         getBookData() {
             this.showLoading()
             this.http.get(`${api.bookApi}/list`, {
@@ -391,6 +398,8 @@ export default {
         refreshList() {
             this.getBookData()
         },
+
+        //图书下架
         offshelf(name) {
             this.$confirm('是否确认下架该图书？', '提示', {
                 confirmButtonText: '确定',
@@ -416,6 +425,7 @@ export default {
                 })
             })
         },
+        //分页
         handleCurrentChange(index) {
             this.showData = this.bookData.slice((index-1)*this.pageSize, index*this.pageSize)
         }
@@ -426,7 +436,7 @@ export default {
         }
     },
     mounted() {
-        this.getBookData(0)
+        this.getBookData()
     }
 }
 </script>
