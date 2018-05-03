@@ -97,7 +97,7 @@ router.post('/offshelf', (req, res) => {
     })
 })
 
-// 获取图书信息
+// 通过书名获取图书信息或者获取全部信息
 router.get('/list', (req, res) => {
     const {name} = req.query
     const filter = {}
@@ -106,8 +106,7 @@ router.get('/list', (req, res) => {
     }
     if (name) {
         BookSchema
-            .find()
-            .where(filter)
+            .find({name:{$regex:name}})
             .exec((err, data) => {
                 if (err) {
                     res.json({
@@ -124,7 +123,6 @@ router.get('/list', (req, res) => {
     } else {
         BookSchema
             .find()
-            .where(filter)
             .exec((err, data) => {
                 if (err) {
                     res.json({
@@ -139,6 +137,32 @@ router.get('/list', (req, res) => {
                 }
             })
     }
+})
+
+
+//通过tag获取图书信息
+router.get('/tag', (req, res) => {
+    const {tag} = req.query
+    if (tag) {
+        BookSchema
+            .find({tag:{$regex:tag}})
+            .exec((err, data) => {
+                if (err) {
+                    res.json({
+                        result: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        result: true,
+                        data: data
+                    })
+                }
+            })
+    } else {
+        return
+    }
+
 })
 
 module.exports = router
