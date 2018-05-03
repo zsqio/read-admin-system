@@ -26,12 +26,6 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.8)"
                         refs="onshelfTable">
-                      <el-table-column label="序号"
-                                       width="80">
-                        <template slot-scope="scope">
-                          {{scope.$index + 1}}
-                        </template>
-                      </el-table-column>
                         <el-table-column label="封面"
                             width="120">
                             <template slot-scope="scope">
@@ -43,6 +37,10 @@
                         <el-table-column prop="name"
                             label="书名">
                         </el-table-column>
+                        <el-table-column prop="isbn"
+                             label="ISBN">
+                        </el-table-column>
+
                         <el-table-column prop="author"
                             label="作者">
                         </el-table-column>
@@ -50,11 +48,14 @@
                             label="出版社">
                         </el-table-column>
                         <el-table-column prop="score"
-                                       label="评分">
+                                       label="评分(0-10分)">
                         </el-table-column>
                         <el-table-column prop="desc"
                             label="简介"
                             show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="tag[1]"
+                                         label="标签">
                         </el-table-column>
                         <el-table-column width="80"
                             label="操作">
@@ -94,6 +95,11 @@
                     <el-input v-model="form.engName"
                               placeholder="选填"
                     ></el-input>
+                  </el-form-item>
+                  <el-form-item label="ISBN:" prop="isbn">
+                    <el-input v-model="form.isbn"
+                                  placeholder="必填">
+                    </el-input>
                   </el-form-item>
                   <el-form-item label="封面地址:" prop="cover">
                     <el-input v-model="form.cover"
@@ -156,18 +162,22 @@ export default {
             pageSize: 5,
             currentPage: 1,
             form: {
-              name: '',
-              engName: '',
-              cover: '',
-              author: '',
-              publisher: '',
-              score: 0,
-              tag: [],
-              desc: '',
+                name: '',
+                engName: '',
+                isbn: '',
+                cover: '',
+                author: '',
+                publisher: '',
+                score: 0,
+                tag: [],
+                desc: '',
             },
             rules: {
                 name: [
                     { required: true, message: '请填写图书名称', trigger: 'blur' }
+                ],
+                isbn: [
+                    { required: true, message: '请填写ISBN', trigger: 'blur' }
                 ],
                 cover: [
                     { required: true, message: '请填写图书封面地址', trigger: 'blur' }
@@ -327,17 +337,17 @@ export default {
                 this.$message.error('请填写必要的信息')
                 return 
             }
-          this.http.post(`${api.bookApi}/record`, this.form)
-            .then(res => {
-              if (res.data.result) {
-                this.$message.success('录入成功')
-                this.form = {}
-              } else {
-                this.$message.error(res.data.msg)
-              }
+            this.http.post(`${api.bookApi}/record`, this.form)
+                .then(res => {
+                if (res.data.result) {
+                    this.$message.success('录入成功')
+                    this.form = {}
+                } else {
+                    this.$message.error(res.data.msg)
+                }
             })
             .catch(error => {
-              this.$message.error(error)
+                this.$message.error(error)
             })
         },
         tabChange() {
@@ -428,7 +438,7 @@ export default {
         //分页
         handleCurrentChange(index) {
             this.showData = this.bookData.slice((index-1)*this.pageSize, index*this.pageSize)
-        }
+        },
     },
     created() {
         if (Store.get('isLogin') === 0) {
@@ -444,5 +454,9 @@ export default {
   .pagination-box {
       width: 50%;
       margin: 20px auto;
+  }
+  .el-tab-panel .el-input {
+      width: 600px;
+      display: block;
   }
 </style>

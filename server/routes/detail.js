@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const BookSchema = require('../schema/book')
+const detailSchema = require('../schema/detail')
 
 // 设置跨域
 router.all('*', (req, res, next) => {
@@ -15,10 +15,11 @@ router.all('*', (req, res, next) => {
     }
 })
 
-// 录入图书信息
-router.post('/record', (req, res) => {
+
+//插入一条详情
+router.post('/add', (req, res) => {
     const { name } = req.body
-    BookSchema.find({ name }, (err, data) => {
+    detailSchema.find({ name }, (err, data) => {
         if (err) {
             res.json({
                 result: false,
@@ -31,7 +32,7 @@ router.post('/record', (req, res) => {
                     if (r.result) {
                         res.json({
                             result: true,
-                            msg: '图书信息录入成功'
+                            msg: '图书详情录入成功'
                         })
                     } else {
                         res.json({
@@ -48,28 +49,23 @@ router.post('/record', (req, res) => {
             } else {
                 res.json({
                     result: false,
-                    msg: '该图书已经上架啦~'
+                    msg: '该图书详情已存在~'
                 })
             }
         }
     })
 })
 //像数据库中新插入一条数据
-function insert({ name, engName, isbn, cover, author, publisher, score, desc, tag}) {
+function insert({ name, authorIntro, bookIntro, comments}) {
     return new Promise((resolve, reject) => {
-        let book = new BookSchema({
+        let detail = new detailSchema({
             name,
-            engName,
-            isbn,
-            cover,
-            author,
-            publisher,
-            score,
-            desc,
-            tag,
+            authorIntro,
+            bookIntro,
+            comments,
             record_date: new Date().getTime(),
         })
-        book.save((err, data) => {
+        detail.save((err, data) => {
             if (err) {
                 reject({ result: false, msg: err })
             } else {
@@ -79,33 +75,15 @@ function insert({ name, engName, isbn, cover, author, publisher, score, desc, ta
     })
 }
 
-// 图书下架,即从数据库中删除该条记录
-router.post('/offshelf', (req, res) => {
-    const { name } = req.body
-    BookSchema.remove({ name }, (err, data) => {
-        if (err) {
-            res.json({
-                result: false,
-                msg: err
-            })
-        } else {
-            res.json({
-                result: true,
-                msg: '下架成功'
-            })
-        }
-    })
-})
-
-// 获取图书信息
-router.get('/list', (req, res) => {
+// 获取图书详情信息
+router.get('/', (req, res) => {
     const {name} = req.query
     const filter = {}
     if (name) {
         filter.name = name
     }
     if (name) {
-        BookSchema
+        detailSchema
             .find()
             .where(filter)
             .exec((err, data) => {
@@ -122,7 +100,7 @@ router.get('/list', (req, res) => {
                 }
             })
     } else {
-        BookSchema
+        detailSchema
             .find()
             .where(filter)
             .exec((err, data) => {
@@ -140,5 +118,4 @@ router.get('/list', (req, res) => {
             })
     }
 })
-
 module.exports = router

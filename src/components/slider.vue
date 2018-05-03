@@ -6,6 +6,8 @@
             :router=true>
             <el-menu-item index="books"
                 class="tc">图书管理</el-menu-item>
+            <el-menu-item index="detail"
+                          class="tc">详情管理</el-menu-item>
             <el-menu-item index="users"
                 class="tc">用户管理</el-menu-item>
             <el-menu-item index="wishes"
@@ -21,6 +23,7 @@ export default {
             activeIndex: 'books',
             pathMap: {
                 Books: 'books',
+                Detail: 'detail',
                 Users: 'users',
                 Records: 'records',
                 Wishes: 'wishes'

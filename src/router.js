@@ -4,6 +4,7 @@ import Login from '@/views/login'
 import Books from '@/views/books'
 import Users from '@/views/users'
 import Wishes from '@/views/wishes'
+import Detail from '@/views/detail'
 
 Vue.use(Router)
 
@@ -21,7 +22,13 @@ export default new Router({
         {
             path: '/books',
             name: 'Books',
-            component: Books
+            component: Books,
+        },
+        {
+            path: '/detail',
+            name: 'Detail',
+            component: Detail
+
         },
         {
             path: '/users',
