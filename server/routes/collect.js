@@ -15,11 +15,35 @@ router.all('*', (req, res, next) => {
     }
 })
 
+//查找某个用户的全部收藏
+router.get('/list', (req, res) => {
+    const { user } = req.query
+    collectSchema.find({ user }, (err, data) => {
+        if(err) {
+            res.json({
+                result: false,
+                msg: err
+            })
+        } else {
+            if(data.length === 0) {
+                res.json({
+                    result: true,
+                    data: data
+                })
+            } else {
+                res.json({
+                    result: true,
+                    data: data
+                })
+            }
+        }
+    })
+})
+
 //查找某本书是否被收藏
-router.post('/status', (req, res) => {
-    const { name, user } = req.body 
+router.get('/status', (req, res) => {
+    const { name, user } = req.query 
     collectSchema.find({ name, user }, (err, data) => {
-        console.log(data)
         if (err) {
             res.json({
                 result: false,
@@ -82,11 +106,12 @@ router.post('/insert', (req, res) => {
     })
 })
 //像数据库中新插入一条数据
-function insert({ name, user}) {
+function insert({ name, user, cover}) {
     return new Promise((resolve, reject) => {
         let collect = new collectSchema({
             name,
             user,
+            cover,
             collectDate: new Date().getTime(),
         })
         collect.save((err, data) => {
