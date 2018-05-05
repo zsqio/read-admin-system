@@ -97,8 +97,47 @@ router.post('/offshelf', (req, res) => {
     })
 })
 
-// 通过书名获取图书信息或者获取全部信息
+// 获取所有的书的总量
+router.get('/count', (req, res) => {
+    BookSchema
+        .find()
+        .count()
+        .exec((err, data) => {
+            if (err) {
+                res.json({
+                    result: false,
+                     msg: err
+                })
+            } else {
+                res.json({
+                     result: true,
+                    data: data,
+            })
+        }
+    })
+})
 router.get('/list', (req, res) => {
+    const {pageIndex} = req.query
+        BookSchema
+            .find()
+            .skip((pageIndex-1)*6)
+            .limit(6)
+            .exec((err, data) => {
+                if (err) {
+                    res.json({
+                        result: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        result: true,
+                        data: data,
+                    })
+                }
+            })
+})
+
+router.get('/search', (req, res) => {
     const {name} = req.query
     const filter = {}
     if (name) {
@@ -121,25 +160,9 @@ router.get('/list', (req, res) => {
                 }
             })
     } else {
-        BookSchema
-            .find()
-            .exec((err, data) => {
-                if (err) {
-                    res.json({
-                        result: false,
-                        msg: err
-                    })
-                } else {
-                    res.json({
-                        result: true,
-                        data: data
-                    })
-                }
-            })
+        return 
     }
 })
-
-
 //通过tag获取图书信息
 router.get('/tag', (req, res) => {
     const {tag} = req.query
