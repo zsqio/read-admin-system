@@ -117,10 +117,11 @@ router.get('/count', (req, res) => {
     })
 })
 router.get('/list', (req, res) => {
-    const {pageIndex} = req.query
-        BookSchema
+    const {pageIndex, startIndex} = req.query
+    if(startIndex) {
+         BookSchema
             .find()
-            .skip((pageIndex-1)*6)
+            .skip(parseInt(startIndex))
             .limit(6)
             .exec((err, data) => {
                 if (err) {
@@ -135,6 +136,26 @@ router.get('/list', (req, res) => {
                     })
                 }
             })
+    } else {
+        BookSchema
+            .find()
+            .skip((pageIndex-1)*6)
+            .limit(6)
+            .exec((err, data) => {
+                if (err) {
+                    res.json({
+                         result: false,
+                         msg: err
+                    })
+                } else {
+                    res.json({
+                         result: true,
+                         data: data,
+                    })
+                }
+            })
+    }
+        
 })
 
 router.get('/search', (req, res) => {
