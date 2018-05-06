@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const collectSchema = require('../schema/collect')
+const CollectSchema = require('../schema/collect')
 
 // 设置跨域
 router.all('*', (req, res, next) => {
@@ -18,7 +18,7 @@ router.all('*', (req, res, next) => {
 //查找某个用户的全部收藏
 router.get('/list', (req, res) => {
     const { user } = req.query
-    collectSchema.find({ user }, (err, data) => {
+    CollectSchema.find({ user }, (err, data) => {
         if(err) {
             res.json({
                 result: false,
@@ -43,7 +43,7 @@ router.get('/list', (req, res) => {
 //查找某本书是否被收藏
 router.get('/status', (req, res) => {
     const { name, user } = req.query 
-    collectSchema.find({ name, user }, (err, data) => {
+    CollectSchema.find({ name, user }, (err, data) => {
         if (err) {
             res.json({
                 result: false,
@@ -69,7 +69,7 @@ router.get('/status', (req, res) => {
 // 录入收藏信息
 router.post('/insert', (req, res) => {
     const { name, user } = req.body 
-    collectSchema.find({ name, user }, (err, data) => {
+    CollectSchema.find({ name, user }, (err, data) => {
         if (err) {
             res.json({
                 result: false,
@@ -108,7 +108,7 @@ router.post('/insert', (req, res) => {
 //像数据库中新插入一条数据
 function insert({ name, user, cover}) {
     return new Promise((resolve, reject) => {
-        let collect = new collectSchema({
+        let collect = new CollectSchema({
             name,
             user,
             cover,
@@ -127,7 +127,7 @@ function insert({ name, user, cover}) {
 //取消收藏,相当于删除一条记录
 router.post('/delete', (req, res) => {
     const { name, user } = req.body 
-    collectSchema.remove({ name, user }, (err, data) => {
+    CollectSchema.remove({ name, user }, (err, data) => {
         if (err) {
             res.json({
                 result: false,

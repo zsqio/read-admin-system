@@ -25,28 +25,28 @@ router.post('/add', (req, res) => {
         } else {
             res.json({
                 result: false,
-                msg: r.msg
+                msg: '评论发表失败'
             })
         }
-    }).catch(err => {
-         res.json({
-             result: false,
-             msg: err
-        })
+    }).catch( err => {
+        res.json({
+                result: false,
+                msg: err
+            })
     })
 })
 
 //像数据库中新插入一条数据
 function insert({ name, user, userAvatar, comment}) {
     return new Promise((resolve, reject) => {
-        let comment = new CommentSchema({
+        let newComment = new CommentSchema({
             name,
             user,
             userAvatar,
             comment,
-            commentDate: new Date().getTime(),
+            commentDate: new Date().getTime()
         })
-        comment.save((err, data) => {
+        newComment.save((err, data) => {
             if (err) {
                 reject({ result: false, msg: err })
             } else {
@@ -55,5 +55,22 @@ function insert({ name, user, userAvatar, comment}) {
         })
     })
 }
+
+router.get('/list', (req, res) => {
+    const { name } = req.query
+    CommentSchema.find({ name }, (err, data) => {
+        if(err) {
+            res.json({
+                result: false,
+                msg: err
+            })
+        } else {
+            res.json({
+                result: true,
+                data: data
+            })
+        }
+    })
+})
 
 module.exports = router

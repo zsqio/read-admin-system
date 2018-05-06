@@ -22,7 +22,7 @@ app.use('/user', usersRouter)
 app.use('/detail', detailRouter)
 app.use('/wish', wishRouter)
 app.use('/collect', collectRouter)
-app.use('./comment', commentRouter)
+app.use('/comment', commentRouter)
 
 app.listen(9999, function () {
     console.log('server connect, listening at http://localhost:9999')

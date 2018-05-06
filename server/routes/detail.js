@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const detailSchema = require('../schema/detail')
+const DetailSchema = require('../schema/detail')
 
 // 设置跨域
 router.all('*', (req, res, next) => {
@@ -19,7 +19,7 @@ router.all('*', (req, res, next) => {
 //插入一条详情
 router.post('/add', (req, res) => {
     const { name } = req.body
-    detailSchema.find({ name }, (err, data) => {
+    DetailSchema.find({ name }, (err, data) => {
         if (err) {
             res.json({
                 result: false,
@@ -58,7 +58,7 @@ router.post('/add', (req, res) => {
 //像数据库中新插入一条数据
 function insert({ name, authorIntro, bookIntro, comments}) {
     return new Promise((resolve, reject) => {
-        let detail = new detailSchema({
+        let detail = new DetailSchema({
             name,
             authorIntro,
             bookIntro,
@@ -83,7 +83,7 @@ router.get('/', (req, res) => {
         filter.name = name
     }
     if (name) {
-        detailSchema
+        DetailSchema
             .find()
             .where(filter)
             .exec((err, data) => {
@@ -100,7 +100,7 @@ router.get('/', (req, res) => {
                 }
             })
     } else {
-        detailSchema
+        DetailSchema
             .find()
             .where(filter)
             .exec((err, data) => {
