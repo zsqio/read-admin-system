@@ -31,6 +31,12 @@
                     placeholder="必填">
                 </el-input>
             </el-form-item>
+            <el-form-item label="作者简介:" prop="authorIntro">
+                    <el-input type="textarea"
+                        v-model="form.authorIntro"
+                        placeholder="必填">
+                    </el-input>
+                </el-form-item>
             <el-form-item label="出版信息:" prop="publisher">
                 <el-input v-model="form.publisher"
                     placeholder="必填">
@@ -61,12 +67,19 @@
                     </el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
                 </el-form-item>
-                <el-form-item label="图书简介:" prop="desc">
+                <el-form-item label="书评:" prop="desc">
                     <el-input type="textarea"
                         v-model="form.desc"
                         placeholder="必填">
                     </el-input>
                 </el-form-item>
+                <el-form-item label="内容简介:" prop="bookIntro">
+                    <el-input type="textarea"
+                        v-model="form.bookIntro"
+                        placeholder="必填">
+                    </el-input>
+                </el-form-item>
+                
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">录入图书</el-button>
                     <el-button>取消</el-button>
@@ -90,35 +103,43 @@ export default {
                 isbn: '',
                 cover: '',
                 author: '',
+                authorIntro: '',
                 publisher: '',
                 score: 0,
                 tag: [],
                 desc: '',
+                bookIntro: ''
             },
             inputVisible: false,
             inputValue: '',
             rules: {
                 name: [
-                    { required: true, message: '请填写图书名称', trigger: 'blur' }
+                    { required: true, message: '请补充图书名称', trigger: 'blur' }
                 ],
                 isbn: [
-                    { required: true, message: '请填写ISBN', trigger: 'blur' }
+                    { required: true, message: '请补充ISBN', trigger: 'blur' }
                 ],
                 cover: [
-                    { required: true, message: '请填写图书封面地址', trigger: 'blur' }
+                    { required: true, message: '请补充图书封面地址', trigger: 'blur' }
                 ],
                 author: [
-                    { required: true, message: '请填写作者', trigger: 'blur' },
+                    { required: true, message: '请补充作者', trigger: 'blur' },
+                ],
+                authorIntro: [
+                    { required: true, message: '请补充作者简介', trigger: 'blur' },
                 ],
                 publisher: [
-                    { required: true, message: '请填写出版社', trigger: 'blur' }
+                    { required: true, message: '请补充出版社', trigger: 'blur' }
                 ],
                 score: [
-                    { required: true, message: '请填写评分', trigger: 'blur' }
+                    { required: true, message: '请补充评分', trigger: 'blur' }
                 ],
                 desc: [
-                    { required: true, message: '请填写图书简介', trigger: 'blur' },
+                    { required: true, message: '请补充书评', trigger: 'blur' },
                     { min: 2, max: 30, message: '长度在 2 到 30个字符', trigger: 'blur'}
+                ],
+                bookIntro: [
+                    { required: true, message: '请补充内容简介', trigger: 'blur' },
                 ]
             }
         }

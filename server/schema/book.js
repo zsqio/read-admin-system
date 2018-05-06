@@ -8,7 +8,9 @@ const BookSchema = new Schema({
     cover: String, // 封面
     score: Number, // 评分
     author: String, // 作者
-    desc: String, // 图书简介
+    authorIntro: String, //作者简介
+    desc: String, // 简短书评
+    bookIntro: String, //图书内容简介
     publisher: String, // 出版社
     tag: Array,  //标签
 })

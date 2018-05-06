@@ -33,15 +33,9 @@
                         <el-table-column prop="name"
                             label="书名">
                         </el-table-column>
-                        <el-table-column prop="isbn"
-                             label="ISBN">
-                        </el-table-column>
-
                         <el-table-column prop="author"
                             label="作者">
                         </el-table-column>
-                        <el-table-column prop="publisher"
-                            label="出版社">
                         </el-table-column>
                         <el-table-column prop="score"
                                        label="评分(0-10分)">
@@ -54,9 +48,13 @@
                                          label="标签"
                                          show-overflow-tooltip>
                         </el-table-column>
-                        <el-table-column width="80"
+                        <el-table-column width="200"
                             label="操作">
                             <template slot-scope="scope">
+                                <el-button
+                                    type="primary"
+                                    plain
+                                   @click="editBook(scope.row.name)">编辑</el-button>
                                 <el-button
                                     type="primary"
                                     plain
@@ -75,7 +73,91 @@
                       @current-change="handleCurrentChange"
                     >
                     </el-pagination>
-                </div>        
+                </div>  
+
+        <el-dialog title="编辑详情"
+            :visible.sync="showModal"
+            width="50%">
+        <el-form :model="detailInfo"
+            ref="detailForm">
+            <el-form-item label="图书名称:" prop="name">
+                <el-input v-model="detailInfo.name"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="图书外文名称:" prop="engName">
+                <el-input v-model="detailInfo.engName"
+                    placeholder="选填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="ISBN:" prop="isbn">
+                <el-input v-model="detailInfo.isbn"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="封面地址:" prop="cover">
+                <el-input v-model="detailInfo.cover"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="作者:" prop="author">
+                <el-input v-model="detailInfo.author"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="作者简介:" prop="authorIntro">
+                    <el-input type="textarea"
+                        v-model="detailInfo.authorIntro"
+                        placeholder="必填">
+                    </el-input>
+                </el-form-item>
+            <el-form-item label="出版信息:" prop="publisher">
+                <el-input v-model="detailInfo.publisher"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="评分:" prop="score">
+                <el-input v-model="detailInfo.score"
+                    placeholder="必填">
+                </el-input>
+            </el-form-item>
+                <el-form-item label="标签:" prop="tag">
+                    <el-tag
+                        :key="tag"
+                        v-for="tag in detailInfo.tag"
+                        closable
+                        :disable-transitions="false"
+                        @close="handleClose(tag)">
+                        {{tag}}
+                    </el-tag>
+                    <el-input
+                        class="input-new-tag"
+                        v-if="inputVisible"
+                        v-model="inputValue"
+                        ref="saveTagInput"
+                        size="small"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm">
+                    </el-input>
+                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                </el-form-item>
+                <el-form-item label="书评:" prop="desc">
+                    <el-input type="textarea"
+                        v-model="detailInfo.desc"
+                        placeholder="必填">
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="bookIntro" label="内容简介:">
+                    <el-input v-model="detailInfo.bookIntro"
+                              type="textarea"
+                              placeholder="请输入内容简介"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">确认修改</el-button>
+                    <el-button @click="cancel">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>      
     </div>
 </template>
 <script>
@@ -96,35 +178,13 @@ export default {
             showData: [],
             pageSize: 5,
             currentPage: 1,
+            detailInfo: {},
+            showModal: false,
+            inputVisible: false,
+            inputValue: '',
         }
     },
     methods: {
-      //录入图书信息
-        onSubmit() {
-            if(!this.form.name || !this.form.cover || !this.form.author || !this.form.publisher || !this.form.desc) {
-                this.$message.error('请填写必要的信息')
-                return 
-            }
-            this.http.post(`${api.bookApi}/record`, this.form)
-                .then(res => {
-                if (res.data.result) {
-                    this.$message.success('录入成功')
-                    this.form = {}
-                } else {
-                    this.$message.error(res.data.msg)
-                }
-            })
-            .catch(error => {
-                this.$message.error(error)
-            })
-        },
-        tabChange() {
-            if (this.tabActive === 'store') {
-                this.$nextTick(() => {
-                    this.getBookData()
-                })
-            }
-        },
         filterChange() {
             this.getBookData()
         },
@@ -138,8 +198,9 @@ export default {
                 }
             }).then(res => {
                 if (res.data.result) {
-                    this.bookData = res.data.data
-                    this.showData = this.bookData
+                    const data = res.data.data
+                    this.bookData = data
+                    this.showData = data
                 } else {
                     this.$message.error()
                 }
@@ -158,6 +219,7 @@ export default {
                 if (res.data.result) {
                     const data = res.data.data
                     data.forEach((item, index) => {
+                        item.score = `${item.score}分`
                         item.tag = item.tag.toString()
                     })
                     this.bookData = res.data.data
@@ -178,10 +240,9 @@ export default {
         refreshList() {
             this.getBookData()
         },
-
         //图书下架
         offshelf(name) {
-            this.$confirm('是否确认下架该图书？', '提示', {
+            this.$confirm(`确定要下架图书《${name}》吗？`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -209,6 +270,65 @@ export default {
         handleCurrentChange(index) {
             this.showData = this.bookData.slice((index-1)*this.pageSize, index*this.pageSize)
         },
+        editBook(name) {
+            this.detailInfo.name = name
+            this.showModal = true
+            this.http.get(`${api.bookApi}/search`, {
+                params: {
+                    name: name
+                }
+            }).then(res => {
+                if (res.data.result) {
+                    const data = res.data.data
+                    this.detailInfo = data[0]
+                } else {
+                    this.$message.error()
+                }
+                this.hideLoading()
+            }).catch(err => {
+                this.hideLoading()
+                this.$message.error(err)
+            })
+        },
+        cancel() {
+            this.showModal = false
+        },
+        onSubmit() {
+            if(!this.detailInfo.authorIntro || !this.detailInfo.bookIntro) {
+                this.$message.error('请填写必要的信息')
+                return
+            }
+            this.http.post(`${api.bookApi}/update`, this.detailInfo)
+                .then(res => {
+                    if (res.data.result) {
+                        this.$message.success('编辑成功')
+                        this.detailInfo= {}
+                        this.showModal = false
+                    } else {
+                        this.$message.error(res.data.msg)
+                    }
+                })
+                .catch(error => {
+                    this.$message.error(error)
+                })
+        },
+        handleClose(tag) {
+            this.detailInfo.tag.splice(this.detailInfo.tag.indexOf(tag), 1);
+        },
+        showInput() {
+            this.inputVisible = true;
+            this.$nextTick(_ => {
+                this.$refs.saveTagInput.$refs.input.focus();
+            });
+       },
+       handleInputConfirm() {
+            let inputValue = this.inputValue;
+            if (inputValue) {
+                this.detailInfo.tag.push(inputValue);
+            }
+            this.inputVisible = false;
+            this.inputValue = '';
+      }
     },
     created() {
         if (Store.get('isLogin') === 0) {

@@ -55,7 +55,7 @@ router.post('/record', (req, res) => {
     })
 })
 //向数据库中新插入一条数据
-function insert({ name, engName, isbn, cover, author, publisher, score, desc, tag}) {
+function insert({ name, engName, isbn, cover, author,authorIntro, publisher, score, desc, bookIntro, tag}) {
     return new Promise((resolve, reject) => {
         let book = new BookSchema({
             name,
@@ -63,9 +63,12 @@ function insert({ name, engName, isbn, cover, author, publisher, score, desc, ta
             isbn,
             cover,
             author,
+            authorIntro,
             publisher,
             score,
             desc,
+            book,
+            bookIntro,
             tag,
             record_date: new Date().getTime(),
         })
@@ -225,6 +228,26 @@ router.get('/tag', (req, res) => {
     } else {
         return
     }
+
+})
+
+router.post('/update', (req, res) => {
+    const {name, engName, author, authorIntro, publisher, score, desc, tag, bookIntro} = req.body
+    BookSchema.find({name})
+              .update({name, engName, author, authorIntro, publisher, score, desc, tag, bookIntro}, 
+              (err, data) => {
+                  if (err) {
+                    res.json({
+                        result: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        result: true,
+                        msg: '编辑成功'
+                    })
+                }
+         })
 
 })
 

@@ -44,32 +44,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog title="编辑详情"
-                   :visible.sync="showModal"
-                   width="35%">
-            <el-form :model="detailInfo"
-                     ref="detailForm">
-                <el-form-item prop="name" label="书名:">
-                    <el-input v-model="detailInfo.name"
-                              type="text"
-                              ></el-input>
-                </el-form-item>
-                <el-form-item prop="authorIntro" label="作者简介:">
-                    <el-input v-model="detailInfo.authorIntro"
-                              type="textarea"
-                              placeholder="请输入作者简介"></el-input>
-                </el-form-item>
-                <el-form-item prop="bookIntro" label="图书简介:">
-                    <el-input v-model="detailInfo.bookIntro"
-                              type="textarea"
-                              placeholder="请输入图书简介"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">录入图书详情</el-button>
-                    <el-button @click="cancel">取消</el-button>
-                </el-form-item>
-            </el-form>
-        </el-dialog>
+        
     </div>
 </template>
 

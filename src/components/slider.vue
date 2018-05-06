@@ -17,7 +17,7 @@
             </el-submenu>
             <el-menu-item index="detail">
                 <i class="el-icon-edit"></i>
-                <span slot="title">详情管理</span>
+                <span slot="title">评论管理</span>
             </el-menu-item>
             <el-menu-item index="users">
                 <i class="el-icon-view"></i>
