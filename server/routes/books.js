@@ -116,6 +116,25 @@ router.get('/count', (req, res) => {
         }
     })
 })
+
+//获取全部的图书
+router.get('/all', (req, res) => {
+    BookSchema
+        .find()
+        .exec((err, data) => {
+            if (err) {
+                    res.json({
+                        result: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        result: true,
+                        data: data,
+                    })
+                }
+        })
+})
 router.get('/list', (req, res) => {
     const {pageIndex, startIndex} = req.query
     if(startIndex) {

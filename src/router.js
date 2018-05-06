@@ -5,6 +5,7 @@ import Books from '@/views/books'
 import Users from '@/views/users'
 import Wishes from '@/views/wishes'
 import Detail from '@/views/detail'
+import Record from '@/views/record'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
             path: '/books',
             name: 'Books',
             component: Books,
+        },
+        {
+           path: '/record',
+            name: 'Record',
+            component: Record, 
         },
         {
             path: '/detail',

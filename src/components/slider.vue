@@ -1,17 +1,32 @@
 <template>
     <div class="slider-container">
-        <el-menu :default-active="activeIndex"
+        <el-menu
+            default-active="books"
             class="el-menu-vertical-demo"
-            mode="vertical"
-            :router=true>
-            <el-menu-item index="books"
-                class="tc">图书管理</el-menu-item>
-            <el-menu-item index="detail"
-                          class="tc">详情管理</el-menu-item>
-            <el-menu-item index="users"
-                class="tc">用户管理</el-menu-item>
-            <el-menu-item index="wishes"
-                class="tc">愿望清单</el-menu-item>
+            :router = true
+            text-color="#333">
+            <el-submenu index="1">
+                <template slot="title">
+                <i class="el-icon-menu"></i>
+                <span>图书管理</span>
+                </template>
+                <el-menu-item-group>
+                    <el-menu-item index="books">所有图书</el-menu-item>
+                    <el-menu-item index="record">图书录入</el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
+            <el-menu-item index="detail">
+                <i class="el-icon-edit"></i>
+                <span slot="title">详情管理</span>
+            </el-menu-item>
+            <el-menu-item index="users">
+                <i class="el-icon-view"></i>
+                <span slot="title">用户管理</span>
+            </el-menu-item>
+            <el-menu-item index="wishes">
+                <i class="el-icon-document"></i>
+                <span slot="title">心愿单</span>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -24,6 +39,7 @@ export default {
             pathMap: {
                 Books: 'books',
                 Detail: 'detail',
+                Record: 'record',
                 Users: 'users',
                 Records: 'records',
                 Wishes: 'wishes'
