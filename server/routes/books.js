@@ -54,7 +54,7 @@ router.post('/record', (req, res) => {
         }
     })
 })
-//像数据库中新插入一条数据
+//向数据库中新插入一条数据
 function insert({ name, engName, isbn, cover, author, publisher, score, desc, tag}) {
     return new Promise((resolve, reject) => {
         let book = new BookSchema({

@@ -15,12 +15,14 @@ var usersRouter = require('./routes/users')
 var detailRouter = require('./routes/detail')
 var wishRouter = require('./routes/wishes')
 var collectRouter = require('./routes/collect')
+var commentRouter = require('./routes/comment')
 
 app.use('/book', booksRouter)
 app.use('/user', usersRouter)
 app.use('/detail', detailRouter)
 app.use('/wish', wishRouter)
 app.use('/collect', collectRouter)
+app.use('./comment', commentRouter)
 
 app.listen(9999, function () {
     console.log('server connect, listening at http://localhost:9999')
