@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const WishSchema = require('../schema/wish')
+const WishSchema = require('../schema/wishes')
 
 // 设置跨域
 router.all('*', function (req, res, next) {
@@ -62,13 +62,17 @@ router.get('/mine', (req, res) => {
 
 // 加入愿望清单
 router.post('/add', (req, res) => {
-    const { title, user } = req.body
-    if (title !== '' && user !== '') {
+    const { name, author, user, informStatus } = req.body
+    if (name !== '' && author !== '') {
         const wish = new WishSchema({
-            title,
-            user
+            name,
+            author,
+            user,
+            informStatus,
+            status: 0,
+            recordDate: new Date().getTime()
         })
-        WishSchema.find({ title, user }, (err, data) => {
+        WishSchema.find({ name, user }, (err, data) => {
             if (err) {
                 res.json({
                     result: false,
@@ -78,7 +82,7 @@ router.post('/add', (req, res) => {
                 if (data.length !== 0) {
                     res.json({
                         result: false,
-                        msg: '已加入愿望清单'
+                        msg: '愿望单中已经存在咯~'
                     })
                 } else {
                     wish.save((err, data) => {
@@ -90,7 +94,7 @@ router.post('/add', (req, res) => {
                         } else {
                             res.json({
                                 result: true,
-                                msg: '已加入愿望清单'
+                                msg: '加入愿望单成功'
                             })
                         }
                     })
@@ -106,10 +110,10 @@ router.post('/add', (req, res) => {
 })
 
 // 移除愿望清单
-router.post('/del', (req, res) => {
+router.post('/delete', (req, res) => {
     console.log(req.body)
-    const { title, user } = req.body
-    WishSchema.remove({ title, user }, (err, data) => {
+    const { name, user } = req.body
+    WishSchema.remove({ name, user }, (err, data) => {
         if (err) {
             res.json({
                 result: false,
