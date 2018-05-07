@@ -18,12 +18,7 @@ router.all('*', function (req, res, next) {
 // 后台愿望列表
 router.get('/list', (req, res) => {
     WishSchema
-        .aggregate([{
-            $group: {
-                _id: '$title',
-                account: { $sum: 1 }
-            }
-        }])
+        .find()
         .exec((err, data) => {
             console.log(err, data)
             if (err) {

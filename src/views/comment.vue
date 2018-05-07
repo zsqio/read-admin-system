@@ -40,6 +40,7 @@
 <script>
     import { api } from '@/config'
     import Store from 'store2'
+    import { formatTime } from '@/util'
 
     export default {
         name: 'detail',
@@ -54,6 +55,10 @@
                 .then(res => {
                     if (res.data.result) {
                         const data = res.data.data 
+                        data.forEach((item, index) => {
+                            let time = new Date(parseInt(item.commentDate))
+                            item.commentDate = formatTime(time)
+                        })
                         this.commentData = data
                     } else {
                         this.$message.error(res.data.msg)

@@ -67,7 +67,6 @@ function insert({ name, engName, isbn, cover, author,authorIntro, publisher, sco
             publisher,
             score,
             desc,
-            book,
             bookIntro,
             tag,
             record_date: new Date().getTime(),

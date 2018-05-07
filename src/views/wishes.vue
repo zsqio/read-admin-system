@@ -1,7 +1,7 @@
 <template>
     <div class="users-container container">
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/wishes' }">愿望清单</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/wishes' }">心愿单</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="content">
             <el-table :data="wishesList"
@@ -17,13 +17,20 @@
                         {{scope.$index + 1}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="_id"
+                <el-table-column prop="name"
                     label="书名">
                 </el-table-column>
-                <el-table-column label="愿望者">
-                    <template slot-scope="scope">
-                        {{scope.row.account}} 次
-                    </template>
+                <el-table-column prop="user"
+                    label="愿望者">
+                </el-table-column>
+                <el-table-column width="80"
+                            label="操作">
+                            <template slot-scope="scope">
+                                <el-button
+                                    type="primary"
+                                    plain
+                                   @click="record(scope.row.name)">上架</el-button>
+                            </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -57,8 +64,12 @@ export default {
                     this.hideLoading()
                     this.$message.error(err)
                 })
+        },
+        record(name) {
+            this.$router.push('../record')
         }
     },
+    
     created() {
         this.getWishesList()
     }
