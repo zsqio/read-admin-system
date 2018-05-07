@@ -4,7 +4,7 @@ import Login from '@/views/login'
 import Books from '@/views/books'
 import Users from '@/views/users'
 import Wishes from '@/views/wishes'
-import Detail from '@/views/detail'
+import Comment from '@/views/comment'
 import Record from '@/views/record'
 
 Vue.use(Router)
@@ -31,9 +31,9 @@ export default new Router({
             component: Record, 
         },
         {
-            path: '/detail',
-            name: 'Detail',
-            component: Detail
+            path: '/comment',
+            name: 'Comment',
+            component: Comment
 
         },
         {

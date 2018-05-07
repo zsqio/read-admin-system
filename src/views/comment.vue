@@ -1,7 +1,7 @@
 <template>
     <div class="detail-container container">
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/detail' }">详情管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/detail' }">评论管理</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="header">
             <el-input v-model="keyWords"

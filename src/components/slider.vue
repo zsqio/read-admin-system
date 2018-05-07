@@ -15,7 +15,7 @@
                     <el-menu-item index="record">图书录入</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="detail">
+            <el-menu-item index="comment">
                 <i class="el-icon-edit"></i>
                 <span slot="title">评论管理</span>
             </el-menu-item>
