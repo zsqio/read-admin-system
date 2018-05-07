@@ -73,4 +73,39 @@ router.get('/list', (req, res) => {
     })
 })
 
+router.get('/all', (req, res) => {
+    CommentSchema
+        .find()
+        .exec((err, data) => {
+            if (err) {
+                    res.json({
+                        result: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        result: true,
+                        data: data,
+                    })
+                }
+        })
+})
+
+router.post('/delete', (req, res) => {
+    const { id } = req.body 
+    CommentSchema.remove({ _id: id }, (err, data) => {
+        if (err) {
+            res.json({
+                result: false,
+                msg: err
+            })
+        } else {
+            res.json({
+                result: true,
+                msg: '屏蔽成功'
+            })
+        }
+    })
+})
+
 module.exports = router

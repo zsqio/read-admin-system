@@ -1,37 +1,26 @@
 <template>
     <div class="detail-container container">
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/detail' }">评论管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/comment' }">评论管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <div class="header">
-            <el-input v-model="keyWords"
-                      prefix-icon="el-icon-search"
-                      autofocus
-                      placeholder="请输入图书名字进行搜索"
-                      clearable></el-input>
-            <el-button type="primary"
-                       plain
-                       @click="searchStore">搜索</el-button>
-        </div>
         <div class="content">
-            <el-table :data="bookData"
+            <el-table :data="commentData"
                       stripe
                       style="width: 100%"
                       refs="onshelfTable">
-                <el-table-column label="封面"
-                                 width="120">
-                    <template slot-scope="scope">
-                        <img :src="scope.row.cover"
-                             width="80"
-                             alt="图书封面">
-                    </template>
-                </el-table-column>
                 <el-table-column prop="name"
                                  label="书名">
                 </el-table-column>
 
-                <el-table-column prop="author"
-                                 label="作者">
+                <el-table-column prop="comment"
+                                 label="评论内容"
+                                 show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="user"
+                                 label="评论者">
+                </el-table-column>
+                <el-table-column prop="commentDate"
+                                 label="评论时间">
                 </el-table-column>
                 <el-table-column width="80"
                                  label="操作">
@@ -39,7 +28,7 @@
                         <el-button
                                 type="primary"
                                 plain
-                                @click="editBook(scope.row.name)">编辑详情</el-button>
+                                @click="deleteComment(scope.row._id, scope.row.user)">屏蔽</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -56,78 +45,55 @@
         name: 'detail',
         data() {
             return {
-                bookData:[],
-                keyWords: '',
-                detailInfo: {
-                    name:'',
-                    authorIntro: '',
-                    bookIntro: ''
-                },
-                showModal: false,
+                commentData: []
             }
         },
         methods: {
-            searchStore() {
-                this.http.get(`${api.bookApi}/list`, {
-                    params: {
-                        name: this.keyWords
-                    }
-                }).then(res => {
+            getCommentData() {
+                this.http.get(`${api.commentApi}/all`, {params:{}})
+                .then(res => {
                     if (res.data.result) {
-                        this.bookData = res.data.data
+                        const data = res.data.data 
+                        this.commentData = data
                     } else {
-                        this.$message.error()
+                        this.$message.error(res.data.msg)
                     }
-                }).catch(err => {
-                    this.$message.error(err)
+                })
+                .catch(error => {
+                    this.$message.error(error)
                 })
             },
-            editBook(name) {
-                this.detailInfo.name = name
-                this.showModal = true
-            },
-            cancel() {
-                this.showModal = false
-            },
-            onSubmit() {
-                if(!this.detailInfo.authorIntro || !this.detailInfo.bookIntro) {
-                    this.$message.error('请填写必要的信息')
-                    return
-                }
-                this.http.post(`${api.detailApi}/add`, this.detailInfo)
+            deleteComment(id, user) {
+                this.$confirm(`确定要屏蔽用户${user}发表的这条评论吗？`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.http.post(`${api.commentApi}/delete`, { id })
                     .then(res => {
                         if (res.data.result) {
-                            this.$message.success('录入成功')
-                            this.detailInfo= {}
+                            this.$message.success('屏蔽成功')
+                            this.getCommentData()
                         } else {
-                            this.$message.error(res.data.msg)
+                            this.$message.success(`操作失败: ${res.data.msg}`)
                         }
                     })
                     .catch(error => {
                         this.$message.error(error)
                     })
-            },
-            getBookData() {
-                this.http.get(`${api.bookApi}/list`, {
-                    params: {
-                        name: this.keyWords
-                    }
-                }).then(res => {
-                    if (res.data.result) {
-                        let data = res.data.data
-                        this.bookData = data
-                    } else {
-                        this.$message.error('查询失败,请稍后重试~')
-                    }
-                }).catch(() => {
-                    this.$message.error('error')
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消屏蔽该条评论'
                 })
-            },
-        },
-        mounted() {
-            this.getBookData()
+            })
         }
+
+    },
+    mounted() {
+            this.getCommentData()
     }
+}
 </script>
 
 <style lang="scss" scoped>
