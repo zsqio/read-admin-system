@@ -58,7 +58,8 @@ function insert({ name, user, userAvatar, comment}) {
 
 router.get('/list', (req, res) => {
     const { name } = req.query
-    CommentSchema.find({ name }, (err, data) => {
+    CommentSchema.find({ name })
+                .exec((err, data) => {
         if(err) {
             res.json({
                 result: false,
@@ -76,6 +77,7 @@ router.get('/list', (req, res) => {
 router.get('/all', (req, res) => {
     CommentSchema
         .find()
+        .sort({"commentDate": -1})
         .exec((err, data) => {
             if (err) {
                     res.json({

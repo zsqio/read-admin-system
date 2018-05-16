@@ -13,7 +13,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: 'books'
+            redirect: 'login'
         },
         {
             path: '/login',

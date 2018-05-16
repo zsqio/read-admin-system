@@ -6,7 +6,7 @@ const commentSchema = new Schema({
     user: String,    //用户名
     userAvatar: String,   //用户头像
     comment: String,  //评论内容
-    commentDate: String,    //评论时间
+    commentDate: Number,    //评论时间
 
 
 })
