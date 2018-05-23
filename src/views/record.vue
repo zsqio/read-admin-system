@@ -34,6 +34,7 @@
             <el-form-item label="作者简介:" prop="authorIntro">
                     <el-input type="textarea"
                         v-model="form.authorIntro"
+                        rows="4"
                         placeholder="必填">
                     </el-input>
                 </el-form-item>
@@ -68,7 +69,7 @@
                     <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
                 </el-form-item>
                 <el-form-item label="书评:" prop="desc">
-                    <el-input type="textarea"
+                    <el-input type="text"
                         v-model="form.desc"
                         placeholder="必填">
                     </el-input>
@@ -76,6 +77,7 @@
                 <el-form-item label="内容简介:" prop="bookIntro">
                     <el-input type="textarea"
                         v-model="form.bookIntro"
+                        rows="4"
                         placeholder="必填">
                     </el-input>
                 </el-form-item>

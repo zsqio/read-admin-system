@@ -13,6 +13,7 @@ const BookSchema = new Schema({
     bookIntro: String, //图书内容简介
     publisher: String, // 出版社
     tag: Array,  //标签
+    record_date: Number,  //录入时间
 })
 
 module.exports = mongoose.model('Book', BookSchema)
