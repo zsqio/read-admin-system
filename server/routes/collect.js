@@ -2,19 +2,6 @@ const express = require('express')
 const router = express.Router()
 const CollectSchema = require('../schema/collect')
 
-// 设置跨域
-router.all('*', (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild')
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
-
-    if (req.method === 'OPTIONS') {
-        res.sendStatus(200) // 让options请求快速返回
-    } else {
-        next()
-    }
-})
-
 //查找某个用户的全部收藏
 router.get('/list', (req, res) => {
     const { user } = req.query
